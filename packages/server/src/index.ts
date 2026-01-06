@@ -13,5 +13,8 @@ export * from './server/auth/index.js';
 // experimental exports
 export * from './experimental/index.js';
 
+// scaffolding exports
+export * from './scaffolding/index.js';
+
 // re-export shared types
 export * from '@modelcontextprotocol/core';

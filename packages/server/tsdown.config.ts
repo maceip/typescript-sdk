@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown';
 export default defineConfig({
     // 1. Entry Points
     //    Directly matches package.json include/exclude globs
-    entry: ['src/index.ts'],
+    entry: ['src/index.ts', 'src/scaffolding/index.ts'],
 
     // 2. Output Configuration
     format: ['esm'],

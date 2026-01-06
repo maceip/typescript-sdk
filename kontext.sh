@@ -88,12 +88,13 @@ log_info "pnpm version: $(pnpm -v)"
 # Step 4: Install project dependencies
 log_info "installing project dependencies..."
 
-# Configure pnpm to enable build scripts (avoid warnings)
-if [ ! -f .npmrc ] || ! grep -q "enable-pre-post-scripts" .npmrc; then
-    log_info "configuring pnpm to enable build scripts..."
+# Configure pnpm to allow build scripts (avoid warnings)
+if [ ! -f .npmrc ] || ! grep -q "ignore-scripts=false" .npmrc; then
+    log_info "configuring pnpm to allow build scripts..."
     echo "" >> .npmrc
-    echo "# Auto-approve build scripts for known safe packages" >> .npmrc
-    echo "enable-pre-post-scripts=true" >> .npmrc
+    echo "# Allow build scripts for dependencies (esbuild, unrs-resolver, etc.)" >> .npmrc
+    echo "# This prevents the 'Ignored build scripts' warning" >> .npmrc
+    echo "ignore-scripts=false" >> .npmrc
 fi
 
 pnpm install

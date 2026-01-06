@@ -301,11 +301,11 @@ export class CodeExecutionServer {
                 {
                     title: func.name,
                     description: func.description,
-                    inputSchema: func.inputSchema ? { input: func.inputSchema } : undefined
+                    inputSchema: func.inputSchema
                 },
                 async (args, extra) => {
                     const context: ExecutionContext = {
-                        sessionId: extra.sessionId,
+                        sessionId: extra?.sessionId,
                         filter: new DataFilter(),
                         state: this.stateStore,
                         notify: async (message: string, level: 'debug' | 'info' | 'warning' | 'error' = 'info') => {
@@ -314,16 +314,16 @@ export class CodeExecutionServer {
                                     level,
                                     data: message
                                 },
-                                extra.sessionId
+                                extra?.sessionId
                             );
                         },
-                        extra
+                        extra: extra!
                     };
 
                     try {
-                        // Execute the function
-                        const input = func.inputSchema ? args.input : undefined;
-                        const result = await Promise.resolve(func.execute(input, context));
+                        // Execute the function with proper argument handling
+                        const input = func.inputSchema && args ? args : undefined;
+                        const result = await Promise.resolve(func.execute(input as any, context));
 
                         // Format result
                         return this._formatResult(result);

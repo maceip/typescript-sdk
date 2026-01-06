@@ -104,17 +104,17 @@ echo "3. Template Starter (minimal template):"
 echo "   pnpm --filter @modelcontextprotocol/examples-scaffolding template"
 echo ""
 echo "========================================="
-echo "Running Template Starter Example..."
+echo "Running Interactive Demo..."
 echo "========================================="
 echo ""
 
-# Run the template starter example
-log_info "Starting template-starter.ts on stdio..."
-log_info "Press Ctrl+C to exit"
+# Run the test client which starts the server and exercises it
+log_info "Starting MCP client-server demo..."
+log_info "The client will connect to the server and test its functionality"
 echo ""
 
-# Run the example using workspace filter
-pnpm --filter @modelcontextprotocol/examples-scaffolding template
+# Run the test client
+pnpm --filter @modelcontextprotocol/examples-scaffolding test-client
 
 # If the above exits, show summary
 echo ""

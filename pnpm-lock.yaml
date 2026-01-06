@@ -296,6 +296,9 @@ importers:
 
   examples/scaffolding:
     dependencies:
+      '@modelcontextprotocol/client':
+        specifier: workspace:^
+        version: link:../../packages/client
       '@modelcontextprotocol/server':
         specifier: workspace:^
         version: link:../../packages/server

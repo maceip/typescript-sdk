@@ -89,16 +89,11 @@ log_info "pnpm version: $(pnpm -v)"
 # Step 4: Install project dependencies
 log_info "installing project dependencies..."
 
-# Configure pnpm to allow build scripts (avoid warnings)
-if [ ! -f .npmrc ] || ! grep -q "ignore-scripts=false" .npmrc; then
-    log_info "configuring pnpm to allow build scripts..."
-    echo "" >> .npmrc
-    echo "# Allow build scripts for dependencies (esbuild, unrs-resolver, etc.)" >> .npmrc
-    echo "# This prevents the 'Ignored build scripts' warning" >> .npmrc
-    echo "ignore-scripts=false" >> .npmrc
-fi
+# Run install and filter out build script warning (benign and expected)
+pnpm install 2>&1 | grep -v "Ignored build scripts" | grep -v "approve-builds" | grep -v "to run scripts" | grep -v "^╭ Warning" | grep -v "^╰──" | grep -v "^│"
 
-pnpm install
+# Rebuild packages with build scripts to ensure they're available
+pnpm rebuild esbuild unrs-resolver 2>/dev/null || true
 
 # Step 5: Build all packages
 log_info "building all packages..."

@@ -7,6 +7,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
+PURPLE='\033[38;5;53m'
 ITALIC='\033[3m'
 BOLD='\033[1m'
 NC='\033[0m' # No Color
@@ -16,9 +17,9 @@ print_header() {
     local text="$1"
     local color="${2:-$GREEN}"
     echo ""
-    echo -e "${BLACK_BG}${color}═══════════════════════════════${RED}kontext.dev${color}═══════════════════════════════${NC}"
+    echo -e "${BLACK_BG}${color}═════════════════════════════════════════════════════════════${PURPLE}kontext.dev${color}═${NC}"
     echo -e "${BLACK_BG}${color}${text}${NC}"
-    echo -e "${BLACK_BG}${color}═══════════════════════════════${RED}kontext.dev${color}═══════════════════════════════${NC}"
+    echo -e "${BLACK_BG}${color}══════════════════════════════════════════════════════════════════════${NC}"
     echo ""
 }
 

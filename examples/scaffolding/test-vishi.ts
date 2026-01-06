@@ -1,7 +1,7 @@
 /**
  * Vishi - Token Savings Demonstration
  *
- * This demo shows REAL token savings by calling the Anthropic API twice:
+ * This demo shows REAL token savings by calling the ChatGPT API twice:
  * 1. Traditional approach: Pass all data to the model
  * 2. Code execution pattern: Use MCP server to filter data locally
  *
@@ -48,8 +48,8 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-console.log('This demo will call the Anthropic API to show REAL token usage.\n');
-const apiKey = await rl.question('Enter your Anthropic API key (or press Enter to skip): ');
+console.log('This demo will call the ChatGPT API to show REAL token usage.\n');
+const apiKey = await rl.question('Enter your ChatGPT API key (or press Enter to skip): ');
 rl.close();
 
 if (!apiKey || apiKey.trim() === '') {
@@ -94,17 +94,17 @@ async function runRealDemo(apiKey: string) {
     console.log('🚀 Starting Real API Demo\n');
 
     try {
-        // Dynamic import of Anthropic SDK
-        const Anthropic = (await import('@anthropic-ai/sdk')).default;
-        const anthropic = new Anthropic({ apiKey });
+        // Dynamic import of OpenAI SDK
+        const OpenAI = (await import('openai')).default;
+        const openai = new OpenAI({ apiKey });
 
         // TEST 1: Traditional Approach - Pass all data to model
         console.log('📋 TEST 1: Traditional Approach (All Data in Context)\n');
-        console.log('Calling Anthropic API with full dataset...');
+        console.log('Calling ChatGPT API with full dataset...');
 
         const traditionalStart = Date.now();
-        const traditionalResponse = await anthropic.messages.create({
-            model: 'claude-3-5-haiku-20241022',
+        const traditionalResponse = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
             max_tokens: 500,
             messages: [{
                 role: 'user',
@@ -114,14 +114,14 @@ async function runRealDemo(apiKey: string) {
         const traditionalTime = Date.now() - traditionalStart;
 
         console.log(`✅ Completed in ${traditionalTime}ms\n`);
-        console.log('Response:', traditionalResponse.content[0].type === 'text' ? traditionalResponse.content[0].text : '');
+        console.log('Response:', traditionalResponse.choices[0].message.content || '');
         console.log(`\n📊 Token Usage:`);
-        console.log(`   Input: ${traditionalResponse.usage.input_tokens.toLocaleString()}`);
-        console.log(`   Output: ${traditionalResponse.usage.output_tokens.toLocaleString()}`);
-        console.log(`   Total: ${(traditionalResponse.usage.input_tokens + traditionalResponse.usage.output_tokens).toLocaleString()}\n`);
+        console.log(`   Input: ${traditionalResponse.usage?.prompt_tokens.toLocaleString()}`);
+        console.log(`   Output: ${traditionalResponse.usage?.completion_tokens.toLocaleString()}`);
+        console.log(`   Total: ${((traditionalResponse.usage?.prompt_tokens || 0) + (traditionalResponse.usage?.completion_tokens || 0)).toLocaleString()}\n`);
 
-        const traditionalCost = (traditionalResponse.usage.input_tokens * 1.00 / 1000000) +
-                               (traditionalResponse.usage.output_tokens * 5.00 / 1000000);
+        const traditionalCost = ((traditionalResponse.usage?.prompt_tokens || 0) * 0.150 / 1000000) +
+                               ((traditionalResponse.usage?.completion_tokens || 0) * 0.600 / 1000000);
         console.log(`💵 Cost: $${traditionalCost.toFixed(6)}\n`);
 
         console.log('═══════════════════════════════════════════════════════════════\n');
@@ -199,12 +199,12 @@ await server.start();
 
             await client.close();
 
-            // Now call Anthropic API with just the filtered results
-            console.log('\nCalling Anthropic API with filtered results only...');
+            // Now call ChatGPT API with just the filtered results
+            console.log('\nCalling ChatGPT API with filtered results only...');
 
             const mcpStart = Date.now();
-            const mcpResponse = await anthropic.messages.create({
-                model: 'claude-3-5-haiku-20241022',
+            const mcpResponse = await openai.chat.completions.create({
+                model: 'gpt-4o-mini',
                 max_tokens: 500,
                 messages: [{
                     role: 'user',
@@ -214,20 +214,25 @@ await server.start();
             const mcpTime = Date.now() - mcpStart;
 
             console.log(`\n✅ Completed in ${mcpTime}ms\n`);
-            console.log('Response:', mcpResponse.content[0].type === 'text' ? mcpResponse.content[0].text : '');
+            console.log('Response:', mcpResponse.choices[0].message.content || '');
             console.log(`\n📊 Token Usage:`);
-            console.log(`   Input: ${mcpResponse.usage.input_tokens.toLocaleString()}`);
-            console.log(`   Output: ${mcpResponse.usage.output_tokens.toLocaleString()}`);
-            console.log(`   Total: ${(mcpResponse.usage.input_tokens + mcpResponse.usage.output_tokens).toLocaleString()}\n`);
+            console.log(`   Input: ${mcpResponse.usage?.prompt_tokens.toLocaleString()}`);
+            console.log(`   Output: ${mcpResponse.usage?.completion_tokens.toLocaleString()}`);
+            console.log(`   Total: ${((mcpResponse.usage?.prompt_tokens || 0) + (mcpResponse.usage?.completion_tokens || 0)).toLocaleString()}\n`);
 
-            const mcpCost = (mcpResponse.usage.input_tokens * 1.00 / 1000000) +
-                           (mcpResponse.usage.output_tokens * 5.00 / 1000000);
+            const mcpCost = ((mcpResponse.usage?.prompt_tokens || 0) * 0.150 / 1000000) +
+                           ((mcpResponse.usage?.completion_tokens || 0) * 0.600 / 1000000);
             console.log(`💵 Cost: $${mcpCost.toFixed(6)}\n`);
 
             // Calculate savings
-            const inputSavings = ((traditionalResponse.usage.input_tokens - mcpResponse.usage.input_tokens) / traditionalResponse.usage.input_tokens) * 100;
-            const totalTraditionalTokens = traditionalResponse.usage.input_tokens + traditionalResponse.usage.output_tokens;
-            const totalMcpTokens = mcpResponse.usage.input_tokens + mcpResponse.usage.output_tokens;
+            const traditionalInputTokens = traditionalResponse.usage?.prompt_tokens || 0;
+            const mcpInputTokens = mcpResponse.usage?.prompt_tokens || 0;
+            const traditionalOutputTokens = traditionalResponse.usage?.completion_tokens || 0;
+            const mcpOutputTokens = mcpResponse.usage?.completion_tokens || 0;
+
+            const inputSavings = ((traditionalInputTokens - mcpInputTokens) / traditionalInputTokens) * 100;
+            const totalTraditionalTokens = traditionalInputTokens + traditionalOutputTokens;
+            const totalMcpTokens = mcpInputTokens + mcpOutputTokens;
             const totalSavings = ((totalTraditionalTokens - totalMcpTokens) / totalTraditionalTokens) * 100;
             const costSavings = traditionalCost - mcpCost;
 
@@ -236,8 +241,8 @@ await server.start();
             console.log('┌──────────────────────┬──────────────┬──────────────┬─────────────┐');
             console.log('│ Metric               │ Traditional  │ MCP Pattern  │ Savings     │');
             console.log('├──────────────────────┼──────────────┼──────────────┼─────────────┤');
-            console.log(`│ Input Tokens         │ ${String(traditionalResponse.usage.input_tokens).padStart(12)} │ ${String(mcpResponse.usage.input_tokens).padStart(12)} │ ${inputSavings.toFixed(1).padStart(10)}% │`);
-            console.log(`│ Output Tokens        │ ${String(traditionalResponse.usage.output_tokens).padStart(12)} │ ${String(mcpResponse.usage.output_tokens).padStart(12)} │        N/A  │`);
+            console.log(`│ Input Tokens         │ ${String(traditionalInputTokens).padStart(12)} │ ${String(mcpInputTokens).padStart(12)} │ ${inputSavings.toFixed(1).padStart(10)}% │`);
+            console.log(`│ Output Tokens        │ ${String(traditionalOutputTokens).padStart(12)} │ ${String(mcpOutputTokens).padStart(12)} │        N/A  │`);
             console.log('├──────────────────────┼──────────────┼──────────────┼─────────────┤');
             console.log(`│ Total Tokens         │ ${String(totalTraditionalTokens).padStart(12)} │ ${String(totalMcpTokens).padStart(12)} │ ${totalSavings.toFixed(1).padStart(10)}% │`);
             console.log(`│ Cost per Request     │ $${traditionalCost.toFixed(6).padStart(11)} │ $${mcpCost.toFixed(6).padStart(11)} │ $${costSavings.toFixed(6).padStart(10)} │`);
@@ -262,9 +267,9 @@ await server.start();
         }
 
     } catch (error: any) {
-        if (error.message?.includes('Cannot find package')) {
-            console.error('\n❌ Anthropic SDK not installed.');
-            console.error('   Install it with: pnpm add @anthropic-ai/sdk\n');
+        if (error.message?.includes('Cannot find package') || error.message?.includes('Cannot find module')) {
+            console.error('\n❌ OpenAI SDK not installed.');
+            console.error('   Install it with: pnpm add openai\n');
             console.log('Running in simulation mode instead...\n');
             runSimulation();
         } else {

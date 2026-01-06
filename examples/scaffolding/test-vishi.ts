@@ -17,6 +17,7 @@ import OpenAI from 'openai';
 
 console.log('═══════════════════════════════════════════════════════════════');
 console.log('  vishi - real token efficiency demonstration');
+console.log('  composable mcp codemode');
 console.log('═══════════════════════════════════════════════════════════════\n');
 
 // generate a large dataset (1,000 customer records for faster demo)
@@ -221,7 +222,8 @@ await server.start();
         console.log('═══════════════════════════════════════════════════════════════\n');
         console.log('reference: https://www.anthropic.com/engineering/code-execution-with-mcp\n');
         console.log('demonstration complete!');
-        console.log('vishi - vision of efficient ai interactions\n');
+        console.log('vishi - vision of efficient ai interactions');
+        console.log('composable mcp codemode\n');
 
     } finally {
         // clean up temp file

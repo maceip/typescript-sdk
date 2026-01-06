@@ -95,13 +95,13 @@ echo ""
 echo "Available example servers:"
 echo ""
 echo "1. Simple Data Server (basic data processing):"
-echo "   pnpm tsx examples/scaffolding/simple-data-server.ts"
+echo "   pnpm --filter @modelcontextprotocol/examples-scaffolding simple-data"
 echo ""
 echo "2. Multi-API Server (Google Drive + Salesforce integration):"
-echo "   pnpm tsx examples/scaffolding/multi-api-server.ts"
+echo "   pnpm --filter @modelcontextprotocol/examples-scaffolding multi-api"
 echo ""
 echo "3. Template Starter (minimal template):"
-echo "   pnpm tsx examples/scaffolding/template-starter.ts"
+echo "   pnpm --filter @modelcontextprotocol/examples-scaffolding template"
 echo ""
 echo "========================================="
 echo "Running Template Starter Example..."
@@ -113,8 +113,8 @@ log_info "Starting template-starter.ts on stdio..."
 log_info "Press Ctrl+C to exit"
 echo ""
 
-# Run the example
-pnpm tsx examples/scaffolding/template-starter.ts
+# Run the example using workspace filter
+pnpm --filter @modelcontextprotocol/examples-scaffolding template
 
 # If the above exits, show summary
 echo ""

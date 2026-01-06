@@ -17,9 +17,9 @@ print_header() {
     local text="$1"
     local color="${2:-$GREEN}"
     echo ""
-    echo -e "${BLACK_BG}${color}═════════════════════════════════════════════════════════════${PURPLE}kontext.dev${color}═${NC}"
+    echo -e "${BLACK_BG}${color}══════════════════════════════════════════════════════════${PURPLE}kontext.dev${color}═${NC}"
     echo -e "${BLACK_BG}${color}${text}${NC}"
-    echo -e "${BLACK_BG}${color}══════════════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BLACK_BG}${color}═══════════════════════════════════════════════════════════════════════${NC}"
     echo ""
 }
 

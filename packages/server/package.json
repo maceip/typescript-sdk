@@ -24,6 +24,10 @@
         ".": {
             "types": "./dist/index.d.mts",
             "import": "./dist/index.mjs"
+        },
+        "./scaffolding": {
+            "types": "./dist/scaffolding/index.d.mts",
+            "import": "./dist/scaffolding/index.mjs"
         }
     },
     "files": [

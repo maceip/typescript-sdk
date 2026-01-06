@@ -133,3 +133,6 @@ dist/
 
 # IDE
 .idea/
+
+# Temporary test files
+.vishi-server.mjs

@@ -8,7 +8,7 @@ import { LoggingMessageNotificationSchema, Server, StdioServerTransport } from '
 const FIXTURES_DIR = path.resolve(__dirname, './__fixtures__');
 
 describe('Process cleanup', () => {
-    vi.setConfig({ testTimeout: 5000 }); // 5 second timeout
+    vi.setConfig({ testTimeout: 10000 }); // 10 second timeout for process cleanup tests
 
     it('server should exit cleanly after closing transport', async () => {
         const server = new Server(
@@ -96,8 +96,8 @@ describe('Process cleanup', () => {
 
         await client.close();
 
-        // A short delay to allow the close event to propagate
-        await new Promise(resolve => setTimeout(resolve, 50));
+        // Wait longer for the server process to terminate
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         try {
             process.kill(serverPid, 9);

@@ -100,6 +100,7 @@ try {
     // create server code that will run in subprocess
     const serverCode = `
 import { createServer } from '@modelcontextprotocol/server/scaffolding';
+import { StdioServerTransport } from '@modelcontextprotocol/server';
 import * as z from 'zod';
 
 const largeDataset = ${JSON.stringify(largeDataset)};
@@ -131,7 +132,8 @@ const server = createServer('efficient-crm-server', '1.0.0')
     )
     .build();
 
-await server.start();
+const transport = new StdioServerTransport();
+await server.connect(transport);
 `;
 
     // write temporary server file

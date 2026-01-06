@@ -33,7 +33,8 @@
     "dependencies": {
         "@modelcontextprotocol/server": "workspace:^",
         "@modelcontextprotocol/client": "workspace:^",
-        "zod": "catalog:runtimeShared"
+        "zod": "catalog:runtimeShared",
+        "openai": "^4.77.3"
     },
     "devDependencies": {
         "tsx": "catalog:devTools"

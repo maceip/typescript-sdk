@@ -294,6 +294,19 @@ importers:
         specifier: catalog:devTools
         version: 0.18.0(@typescript/native-preview@7.0.0-dev.20251218.3)(typescript@5.9.3)
 
+  examples/scaffolding:
+    dependencies:
+      '@modelcontextprotocol/server':
+        specifier: workspace:^
+        version: link:../../packages/server
+      zod:
+        specifier: catalog:runtimeShared
+        version: 3.25.76
+    devDependencies:
+      tsx:
+        specifier: catalog:devTools
+        version: 4.20.6
+
   examples/server:
     dependencies:
       '@hono/node-server':

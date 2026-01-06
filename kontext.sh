@@ -126,7 +126,7 @@ log_info "Running Vishi - Token Savings Demo..."
 echo ""
 
 # Run the vishi demonstration
-timeout 5 pnpm --filter @modelcontextprotocol/examples-scaffolding vishi || true
+pnpm --filter @modelcontextprotocol/examples-scaffolding vishi
 
 echo ""
 echo "========================================="

@@ -74,6 +74,15 @@ log_info "pnpm version: $(pnpm -v)"
 
 # Step 4: Install project dependencies
 log_info "Installing project dependencies..."
+
+# Configure pnpm to enable build scripts (avoid warnings)
+if [ ! -f .npmrc ] || ! grep -q "enable-pre-post-scripts" .npmrc; then
+    log_info "Configuring pnpm to enable build scripts..."
+    echo "" >> .npmrc
+    echo "# Auto-approve build scripts for known safe packages" >> .npmrc
+    echo "enable-pre-post-scripts=true" >> .npmrc
+fi
+
 pnpm install
 
 # Step 5: Build all packages

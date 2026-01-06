@@ -27,7 +27,8 @@
         "simple-data": "tsx simple-data-server.ts",
         "multi-api": "tsx multi-api-server.ts",
         "template": "tsx template-starter.ts",
-        "test-client": "tsx test-client.ts"
+        "test-client": "tsx test-client.ts",
+        "vishi": "tsx test-vishi.ts"
     },
     "dependencies": {
         "@modelcontextprotocol/server": "workspace:^",

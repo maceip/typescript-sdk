@@ -116,8 +116,19 @@ echo ""
 # Run the test client
 pnpm --filter @modelcontextprotocol/examples-scaffolding test-client
 
-# If the above exits, show summary
 echo ""
 echo "========================================="
-echo "Example execution completed!"
+echo "Token Efficiency Demonstration (Vishi)"
+echo "========================================="
+echo ""
+
+log_info "Running Vishi - Token Savings Demo..."
+echo ""
+
+# Run the vishi demonstration
+timeout 5 pnpm --filter @modelcontextprotocol/examples-scaffolding vishi || true
+
+echo ""
+echo "========================================="
+echo "All demonstrations completed!"
 echo "========================================="

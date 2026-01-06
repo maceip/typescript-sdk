@@ -207,8 +207,4 @@ console.log('══════════════════════�
 console.log('Vishi - Vision of Efficient AI Interactions ✨');
 console.log('═══════════════════════════════════════════════════════════════\n');
 
-// Start the server to demonstrate it works
-console.log('Starting efficient CRM server to verify implementation...\n');
-const transport = new StdioServerTransport();
-await server.connect(transport);
-console.log('✅ Server running! (Press Ctrl+C to exit)\n');
+console.log('✅ Demonstration complete!\n');
